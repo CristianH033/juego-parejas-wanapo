@@ -1,5 +1,5 @@
 <template>
-  <div>inicio</div>
+  <div>juego</div>
 </template>
 
 <script>
