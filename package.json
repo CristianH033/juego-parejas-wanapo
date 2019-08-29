@@ -1,5 +1,11 @@
 {
   "name": "juego-parejas-wanapo",
+  "displayName": "Juego Wanapo",
+  "author": {
+    "name": "Cristian David Home",
+    "email": "cristian_david033@hotmail.com",
+    "url": "https://www.facebook.com/CristianHome"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
