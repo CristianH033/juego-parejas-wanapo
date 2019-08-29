@@ -1,10 +1,14 @@
 <template>
-  <div>juego</div>
+  <div>
+    <malla></malla>
+  </div>
 </template>
 
 <script>
+import Malla from "../components/Malla.vue";
 export default {
   props: {},
+  components: {Malla},
   data: () => ({}),
   computed: {},
   methods: {},

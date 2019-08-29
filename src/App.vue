@@ -5,7 +5,7 @@
       <router-link :to="{ name: 'game' }">Juego</router-link>|
       <router-link :to="{ name: 'results' }">Resultados</router-link>
     </div>
-      <router-view />
+    <router-view />
   </div>
 </template>
 
