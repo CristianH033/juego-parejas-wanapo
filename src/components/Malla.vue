@@ -1,6 +1,6 @@
 <template>
   <div>
-    <transition-group name="flip-list" tag="div" class="flex flex-wrap max-w-2xl overflow-hidden">
+    <transition-group name="shuffle-items" tag="div" class="flex flex-wrap max-w-2xl overflow-hidden">
       <div v-for="item in items" :key="item.id" class="my-2 px-2 w-1/4 overflow-hidden">
         <logo :item="item" @click="select(item)"></logo>
       </div>
@@ -23,13 +23,20 @@ export default {
       selectedItems: "getSelectedItems",
       flippedItems: "getFlippedItems",
       win: "getWin",
-      ongoingGame: "getOngoingGame"
+      ongoingGame: "getOngoingGame",
+      clicks: "getClicks",
     })
   },
   methods: {
     select(item) {
-      if (item.flipped) {
+      if (item.flipped || item.selected) {
         return;
+      }
+
+      this.$store.dispatch("incrementClicks");
+      if(this.clicks == 2){
+        this.$store.dispatch("incrementAttempts");
+        this.$store.dispatch("resetClicks");
       }
 
       if (this.selectedItems.find(i => i.id == item.id)) {
@@ -39,14 +46,12 @@ export default {
 
       if (this.selectedItems.length >= 2) {
         this.$store.dispatch("unselectItemsSelected");
-        this.$store.dispatch("incrementAttempts");
       }
 
       if ((prevItem = this.selectedItems.find(i => i.value == item.value))) {
         var prevItem;
         this.$store.dispatch("setItemsFlipped", [prevItem, item]);
         this.$store.dispatch("unselectItemsSelected");
-        this.$store.dispatch("incrementAttempts");
         return;
       }
 
@@ -57,6 +62,7 @@ export default {
       this.$store.dispatch("unselectAll");
       this.$store.dispatch("unflipAll");
       this.$store.dispatch("resetAttempts");
+      this.$store.dispatch("resetClicks");
       setTimeout(() => {
         this.$store.dispatch("shuffleItems");
       }, time);
@@ -68,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.flip-list-move {
+.shuffle-items-move {
   transition: transform .6s;
 }
 </style>

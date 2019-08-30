@@ -8,12 +8,12 @@
       <div
         class="flip-card-front bg-blue-300 rounded-lg shadow-lg flex justify-center items-center mx-auto"
       >
-        <span class="text-5xl">?</span>
+        <span class="text-5xl">{{ item.value }}</span>
       </div>
       <div
         class="flip-card-back bg-red-300 rounded-lg shadow-lg flex justify-center items-center mx-auto"
       >
-        <span class="text-5xl">{{ item.value }}</span>
+        <span class="text-5xl">?</span>
       </div>
     </div>
   </div>

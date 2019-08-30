@@ -1,7 +1,8 @@
 <template>
   <div>
     <malla></malla>
-    <span>{{attempts}}</span>
+    <span>intentos: {{attempts}}</span>
+    <span>Clicks: {{clicks}}</span>
   </div>
 </template>
 
@@ -15,6 +16,7 @@ export default {
   computed: {
     ...mapGetters({
       attempts: "getAttempts",
+      clicks: "getClicks",
     })
   },
   methods: {},

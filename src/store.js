@@ -17,7 +17,8 @@ export default new Vuex.Store({
     ongoingGame: false,
     win: false,
     items: items,
-    attempts: 0
+    attempts: 0,
+    clicks: 0,
   },
   getters: {
     getItems: state => {
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     },
     getAttempts: state => {
       return state.attempts;
+    },
+    getClicks: state => {
+      return state.clicks;
     }
   },
   mutations: {
@@ -78,6 +82,9 @@ export default new Vuex.Store({
     },
     setAttempts: (state, attempts) => {
       state.attempts = attempts;
+    },
+    setClicks: (state, clicks) => {
+      state.clicks = clicks;
     }
   },
   actions: {
@@ -135,6 +142,18 @@ export default new Vuex.Store({
     resetAttempts: ({ commit }) => {
       return new Promise(resolve => {
         commit("setAttempts", 0);
+        resolve();
+      });
+    },
+    incrementClicks: ({ commit, getters }) => {
+      return new Promise(resolve => {
+        commit("setClicks", (getters.getClicks + 1));
+        resolve();
+      });
+    },
+    resetClicks: ({ commit }) => {
+      return new Promise(resolve => {
+        commit("setClicks", 0);
         resolve();
       });
     }
