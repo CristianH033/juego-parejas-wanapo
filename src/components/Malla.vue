@@ -1,12 +1,14 @@
 <template>
   <div>
-    <transition-group name="shuffle-items" tag="div" class="flex flex-wrap max-w-2xl overflow-hidden">
-      <div v-for="item in items" :key="item.id" class="my-2 px-2 w-1/4 overflow-hidden">
+    <transition-group
+      name="shuffle-items"
+      tag="div"
+      class="malla"
+    >
+      <div v-for="item in items" :key="item.id" class="item">
         <logo :item="item" @click="select(item)"></logo>
       </div>
     </transition-group>
-    <br />
-    <button class="py-2 px-4 rounded text-white bg-green-500" @click="newGame">Nuevo Juego</button>
   </div>
 </template>
 
@@ -19,62 +21,70 @@ export default {
   data: () => ({}),
   computed: {
     ...mapGetters({
-      items: "getItems",
       selectedItems: "getSelectedItems",
+      totalSelected: "getTotalSelected",
       flippedItems: "getFlippedItems",
-      win: "getWin",
       ongoingGame: "getOngoingGame",
-      clicks: "getClicks",
+      itemsLeft: "getItemsLeft",
+      items: "getItems",
+      win: "getWin",
     })
   },
   methods: {
     select(item) {
-      if (item.flipped || item.selected) {
+      if (!this.ongoingGame) this.$store.dispatch("setOngoingGame", true);
+      if (item.flipped || item.selected || this.totalSelected >= 2) {
         return;
       }
-
-      this.$store.dispatch("incrementClicks");
-      if(this.clicks == 2){
-        this.$store.dispatch("incrementAttempts");
-        this.$store.dispatch("resetClicks");
-      }
-
-      if (this.selectedItems.find(i => i.id == item.id)) {
-        this.$store.dispatch("setSelected", item);
-        return;
-      }
-
-      if (this.selectedItems.length >= 2) {
-        this.$store.dispatch("unselectItemsSelected");
-      }
-
       if ((prevItem = this.selectedItems.find(i => i.value == item.value))) {
         var prevItem;
         this.$store.dispatch("setItemsFlipped", [prevItem, item]);
-        this.$store.dispatch("unselectItemsSelected");
-        return;
       }
-
       this.$store.dispatch("setSelected", item);
     },
     newGame() {
-      let time = (this.selectedItems.length > 0 | this.flippedItems.length > 0) ? 500 : 0;
-      this.$store.dispatch("unselectAll");
-      this.$store.dispatch("unflipAll");
-      this.$store.dispatch("resetAttempts");
-      this.$store.dispatch("resetClicks");
-      setTimeout(() => {
-        this.$store.dispatch("shuffleItems");
-      }, time);
+      this.$store.dispatch("newGame");
     }
   },
   created() {},
-  mounted() {}
+  mounted() {},
+  watch: {
+    totalSelected(val) {
+      if (val >= 2) {
+        this.$store.dispatch("incrementAttempts");
+        setTimeout(() => {
+          this.$store.dispatch("unselectItemsSelected");
+        }, 1000);
+      }
+    },
+    itemsLeft(val) {
+      if (val == 0) {
+        this.$store.dispatch("setWin", true);
+        this.$store.dispatch("setOngoingGame", false)
+      }
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
+.malla{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 15px;  
+}
+
+.item{
+  flex: 1 0 20%; 
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .shuffle-items-move {
-  transition: transform .6s;
+  transition: transform 0.6s;
 }
 </style>

@@ -18,7 +18,7 @@ export default new Vuex.Store({
     win: false,
     items: items,
     attempts: 0,
-    clicks: 0,
+    time: null
   },
   getters: {
     getItems: state => {
@@ -30,6 +30,15 @@ export default new Vuex.Store({
     getFlippedItems: (state, getters) => {
       return getters.getItems.filter(item => item.flipped);
     },
+    getTotalFliped: (state, getters) => {
+      return getters.getSelectedItems.length + getters.getFlippedItems.length;
+    },
+    getTotalSelected: (state, getters) => {
+      return getters.getSelectedItems.length;
+    },
+    getItemsLeft: (state, getters) => {
+      return getters.getItems.length - getters.getFlippedItems.length;
+    },
     getWin: state => {
       return state.win;
     },
@@ -38,9 +47,6 @@ export default new Vuex.Store({
     },
     getAttempts: state => {
       return state.attempts;
-    },
-    getClicks: state => {
-      return state.clicks;
     }
   },
   mutations: {
@@ -83,8 +89,11 @@ export default new Vuex.Store({
     setAttempts: (state, attempts) => {
       state.attempts = attempts;
     },
-    setClicks: (state, clicks) => {
-      state.clicks = clicks;
+    setOngoingGame: (state, value) => {
+      state.ongoingGame = value;
+    },
+    setWin: (state, value) => {
+      state.win = value;
     }
   },
   actions: {
@@ -145,16 +154,30 @@ export default new Vuex.Store({
         resolve();
       });
     },
-    incrementClicks: ({ commit, getters }) => {
+    setOngoingGame: ({ commit }, val) => {
       return new Promise(resolve => {
-        commit("setClicks", (getters.getClicks + 1));
+        commit("setOngoingGame", val);
         resolve();
       });
     },
-    resetClicks: ({ commit }) => {
+    setWin: ({ commit }, val) => {
       return new Promise(resolve => {
-        commit("setClicks", 0);
+        commit("setWin", val);
         resolve();
+      });
+    },
+    newGame: ({ getters, dispatch }) => {
+      return new Promise(resolve => {
+        let time = getters.getTotalFliped > 0 ? 500 : 0;
+        dispatch("unselectAll");
+        dispatch("unflipAll");
+        dispatch("resetAttempts");
+        dispatch("setWin" , false);
+        dispatch("setOngoingGame" , false);
+        setTimeout(() => {
+          dispatch("shuffleItems");
+          resolve();
+        }, time);
       });
     }
   },

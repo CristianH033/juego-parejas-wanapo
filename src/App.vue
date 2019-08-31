@@ -1,12 +1,7 @@
 <template>
-  <div id="app" class="h-screen w-screen">
-    <div id="nav">
-      <router-link :to="{ name: 'home' }">Inicio</router-link>|
-      <router-link :to="{ name: 'game' }">Juego</router-link>|
-      <router-link :to="{ name: 'results' }">Resultados</router-link>
-    </div>
+  <transition name="fade" mode="out-in">
     <router-view />
-  </div>
+  </transition>
 </template>
 
 <script>

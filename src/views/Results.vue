@@ -1,5 +1,7 @@
 <template>
-  <div>resultados</div>
+  <div id="app" class="h-screen w-screen">
+    <div>resultados</div>
+  </div>
 </template>
 
 <script>
