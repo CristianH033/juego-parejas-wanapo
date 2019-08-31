@@ -75,6 +75,7 @@ export default {
 .info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 20pt;
 }
 
