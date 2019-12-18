@@ -1,16 +1,18 @@
 <template>
   <div
     class="flip-card"
-    :class="{ 'selected': item.selected | item.flipped, 'flipped': item.flipped }"
+    :class="{ selected: item.selected | item.flipped, flipped: item.flipped }"
     @click="$emit('click')"
   >
     <div class="flip-card-inner">
       <div class="flip-card-front">
-        <span>?</span>
+        <span>❓</span>
       </div>
       <div
         class="flip-card-back"
-        :style="{'background-image': `url(${require(`@/assets/svg/${item.value}.svg`)})`}"
+        :style="{
+          'background-image': `url(${require(`@/assets/svg/${item.value}.svg`)})`
+        }"
       >
         <transition name="wrong">
           <span v-if="wrong">❌</span>

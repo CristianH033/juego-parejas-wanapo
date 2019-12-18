@@ -54,7 +54,10 @@ export default new Vuex.Store({
       state.items = items;
     },
     setItem: (state, item) => {
-      Object.assign(state.items.find(i => i.id === item.id), item);
+      Object.assign(
+        state.items.find(i => i.id === item.id),
+        item
+      );
     },
     setSelected: (state, item) => {
       item.selected = true;
@@ -169,11 +172,15 @@ export default new Vuex.Store({
     newGame: ({ getters, dispatch }) => {
       return new Promise(resolve => {
         let time = getters.getTotalFliped > 0 ? 500 : 0;
-        dispatch("unselectAll");
-        dispatch("unflipAll");
-        dispatch("resetAttempts");
-        dispatch("setWin" , false);
-        dispatch("setOngoingGame" , false);
+        let t2 = getters.getWin ? 500 : 0;
+        time += t2;
+        dispatch("setWin", false);
+        setTimeout(() => {
+          dispatch("unselectAll");
+          dispatch("unflipAll");
+          dispatch("resetAttempts");
+          dispatch("setOngoingGame", false);
+        }, t2);
         setTimeout(() => {
           dispatch("shuffleItems");
           resolve();

@@ -6,18 +6,18 @@
       class="malla"
     >
       <div v-for="item in items" :key="item.id" class="item">
-        <logo :item="item" @click="select(item)"></logo>
+        <ficha :item="item" @click="select(item)"></ficha>
       </div>
     </transition-group>
   </div>
 </template>
 
 <script>
-import Logo from "../components/Logo.vue";
+import Ficha from "../components/Ficha.vue";
 import { mapGetters } from "vuex";
 export default {
   props: {},
-  components: { Logo },
+  components: { Ficha },
   data: () => ({}),
   computed: {
     ...mapGetters({

@@ -1,16 +1,20 @@
 <template>
   <div id="app" class="game">
+    <transition name="win">
+      <div v-if="win" class="win-message">
+        <div class="message">
+          <p>🎉 Felicitaciones! 🎉</p>
+          <button @click="newGame">Nuevo Juego</button>
+        </div>
+      </div>
+    </transition>
     <img class="logo" src="@/assets/svg/logo.svg" alt="logo" />
     <div class="pad">
-      <transition name="win">
-        <div v-if="win" class="win-message">
-          <p>🎉 Felicitaciones! 🎉</p>
-        </div>
-      </transition>
       <malla></malla>
       <div class="info">
-        <p>intentos: {{attempts}}</p>
+        <p>intentos: {{ attempts }}</p>
         <button @click="newGame">Nuevo Juego</button>
+        <!-- <button @click="winGame">Ganar Juego</button> -->
       </div>
     </div>
   </div>
@@ -32,7 +36,12 @@ export default {
   },
   methods: {
     newGame() {
+      // this.$store.dispatch("setWin", !this.win);
       this.$store.dispatch("newGame");
+    },
+    winGame() {
+      // this.$store.dispatch("setWin", !this.win);
+      this.$store.dispatch("setItemsFlipped", this.$store.getters.getItems);
     }
   },
   created() {},
@@ -42,6 +51,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+$transition: .5s;
+$delay: 1s;
+
 .game {
   position: absolute;
   width: 100%;
@@ -55,15 +68,30 @@ export default {
 }
 .win-message {
   position: fixed;
-  top: 30px;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
   z-index: 9;
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  // box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+  // padding: 20px;
+  // border-radius: 30px;
+  // text-align: center;
+  font-size: 30pt;
+}
+.message {
+  opacity: 1;
+  text-align: center;
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
   padding: 20px;
   border-radius: 30px;
   text-align: center;
-  font-size: 30pt;
 }
 .logo {
   flex-grow: 1;
@@ -72,18 +100,46 @@ export default {
   max-width: 300px;
   width: 100%;
 }
+.pad {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
 .info {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   font-size: 20pt;
 }
 
 // Transitions
-.win-enter-active,
-.win-leave-active {
-  transition: transform 0.5s;
+.win-enter-active {
+  transition: all $transition $delay;
 }
-.win-enter, .win-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  transform: translateY(-100%);
+.win-leave-active {
+  transition: all $transition;
+  // transition: transform 0.5s;
+}
+.win-enter, .win-leave-to {
+  // transform: translateY(-100%);
+  background-color: rgba(255, 255, 255, 0);
+  // opacity: 0;
+}
+
+.win-enter-active .message {
+  transition: all ($transition / 2) ($delay + ($transition / 2));
+}
+.win-enter .message {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+.win-leave-active .message {
+  transition: all ($transition / 2);
+}
+.win-leave-to .message {
+  opacity: 0;
+  transform: scale(1.1);
+  // backdrop-filter: blur(0px);
 }
 </style>
