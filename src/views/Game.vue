@@ -109,6 +109,7 @@ $delay: 1s;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  align-items: center;
   font-size: 20pt;
 }
 

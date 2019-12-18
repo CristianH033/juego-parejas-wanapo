@@ -49,8 +49,8 @@ export default {
 <style lang="scss" scoped>
 .flip-card {
   perspective: 500px;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   cursor: pointer;
 }
